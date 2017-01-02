@@ -1,6 +1,10 @@
 .site {
-  @include justify;
-
+ 	position: relative;
+ 	overflow: hidden;
+ 	width: 100%;
+ 	min-height: 100%;
+ 	padding-bottom: 83px;
+ 	font-family: 'Open Sans', sans-serif;
 }
 @media (min-width: $phone-landscape) {
   .site {
