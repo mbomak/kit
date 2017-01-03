@@ -20,8 +20,7 @@
           _popupContent = _popup.children( '.popup__content' ),
           _btnShow =  $( '.popup__open' ),
           _btnClose = _popupContent.children( '.popup__close' ),
-          _scrollConteiner = $( 'html' ),
-          _window = $( window ),
+          _scrollConteiner = $( 'body' ),
           _timer = setTimeout( function(){}, 1 );
 
       //private methods
@@ -88,8 +87,6 @@
       },
       _hide = function(){
 
-        _popup.css( 'overflowY','hidden' );
-
         _scrollConteiner.css( {
             overflowY: 'auto',
             paddingRight: 0
@@ -99,8 +96,6 @@
         _popup.addClass( 'popup_hide' );
 
         _timer = setTimeout( function(){
-
-          _popup.css ( 'overflowY','auto' );
 
           _popup.removeClass( 'popup_hide' );
 
