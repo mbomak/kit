@@ -1,30 +1,14 @@
 .btn {
-  border: none;
-  height: 50px;
-  padding: 0 10px;
+  display: inline-block;
+  margin: 50px;
+  padding: 10px 50px;
   color: #fff;
-  display: flex;
-  text-align: left;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
+  border: none;
+  border-radius: 5px;
   font-size: 14px;
   background: green;
 
   &:hover {
     background: red;
   }
-
-
-
-  &_2 {
-    width: 150px;
-    height: 40px;
-    background: blue;
-
-    &:hover {
-      background: yellow;
-    }
-  }
-
 }

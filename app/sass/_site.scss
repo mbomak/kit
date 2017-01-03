@@ -5,6 +5,10 @@
  	min-height: 100%;
  	padding-bottom: 83px;
  	font-family: 'Open Sans', sans-serif;
+
+ 	&__popup {
+ 		margin: 50px 50px;
+ 	}
 }
 @media (min-width: $phone-landscape) {
   .site {
