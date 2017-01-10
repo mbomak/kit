@@ -1,5 +1,6 @@
 .popup {
   display: flex;
+  align-items: flex-start;
   opacity: 0;
   overflow-y: auto; 
   position: fixed;
@@ -85,7 +86,7 @@
   &__write-field {
     display: inline-block;
     width: 40%;
-    height: 600px;
+    height: 500px;
     background:red;
   }
 
