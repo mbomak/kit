@@ -3,27 +3,19 @@
  	overflow: hidden;
  	width: 100%;
  	min-height: 100%;
- 	padding-bottom: 83px;
  	font-family: 'Open Sans', sans-serif;
-}
-@media (min-width: $phone-landscape) {
-  .site {
 
-  }
-}
-@media (min-width: $tablet-portrait) {
-  .site {
+	&__shape {
+		margin-top: 30px;
+		margin-bottom: 20px;
+		margin-left: 10%; 
 
-  }
-}
-@media (min-width: $tablet-landscape) {
-  .site {
+		label {
+			margin-right: 10px;
+			&:last-child {
+				margin-right: 0;
+			}
+		}
+	}
 
-  }
 }
-@media (min-width: $desktop) {
-  .site {
-
-  }
-}
-

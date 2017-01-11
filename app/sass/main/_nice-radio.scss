@@ -1,0 +1,63 @@
+.nice-radio {
+  display: inline-block;
+  vertical-align: top;
+  user-select: none;
+
+  input[ type = radio ] {
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+
+    &:checked + label {
+
+      &:before {
+        display: block;
+      }
+
+    }
+
+    &:disabled + label {
+      cursor: default;
+      opacity: .5;
+    }
+
+  }
+  label {
+    position: relative;
+    display: inline-flex;
+    text-align: left;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 20px;
+    padding-left: 25px;
+    color: #575757;
+    cursor: pointer;
+
+    &:after,
+    &:before {
+      position: absolute;
+      border-radius: 50%;
+      content: '';
+    }
+
+    &:after {
+      top: 0;
+      left: 0;
+      width: 15px;
+      height: 15px;
+      border: 2px solid #ccc;
+    }
+
+    &:before {
+      display: none;
+      top: 7px;
+      left: 7px;
+      background: #777;
+      width: 5px;
+      height: 5px;
+      content: '';
+    }
+
+  }
+
+}
