@@ -87,10 +87,10 @@ gulp.task('styles', function () {
 gulp.task( 'scripts', function () {
     for ( var i = 0; i < paths.scripts.length; i++ ){
         gulp.src( paths.scripts[ i ].contains )
-            .pipe(sourcemaps.init())
-            .pipe(uglify())
+            //.pipe(sourcemaps.init())
+            //.pipe(uglify())
             .pipe(concat(paths.scripts[ i ].dist))
-            .pipe(sourcemaps.write())
+            //.pipe(sourcemaps.write())
             .pipe(gulp.dest('dist/js/'));
     }
 });
