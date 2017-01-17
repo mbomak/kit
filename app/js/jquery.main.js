@@ -7,15 +7,11 @@
 			//private properties
 			this._canvas = item;
 			this._ctx = this._canvas.getContext('2d');
+			this._canvasCur = undefined;
 			this._pos = undefined;
 			this._shape = undefined;
 			this._color = undefined;
-			this._width = this._canvas.width;
-			this._height = this._canvas.height;
-			this._drag = false;
-			this._startX = undefined;
-			this._startY = undefined;
-			this._rect = [];
+			this._arrCanvas = [];
 			this._radioButtons = document.querySelectorAll( '.site__shape input' );
 			this._onEvents();
 		}
@@ -70,68 +66,6 @@
 			  }
 
 			},
-			draw = ()=>{
-
-				if ( this._ctx ) {
-
-					this._canvas.addEventListener( 'click',( e )=>{
-
-						this._pos = getPos( e );
-						let x = this._pos.x;
-						let y = this._pos.y;
-
-						this._color = getRandomColor();
-
-						if ( this._shape == 'square' ) {
-
-							drawSquare( x,y,this._color );
-
-							this._rect.push( { 
-								x:x-30,
-								y:y-30,
-								width:60,
-								height:60,
-								fill:this._color,
-								isDragging:false,
-								shape:this._shape
-							} );
-
-						} else if ( this._shape == 'triangle' ) {
-
-							drawTriangle( x,y,this._color );
-
-							this._rect.push( { 
-								x:x-(Math.sqrt(3)*20),
-								y:y-40,
-								width:Math.sqrt(3)*20,
-								height:60,
-								fill:this._color,
-								isDragging:false,
-								shape:this._shape
-							} );
-
-
-						} else if ( this._shape == 'circle' ) {
-
-							drawCircle( x,y,this._color );
-
-							this._rect.push( { 
-								x:x-30,
-								y:y-30,
-								width:60,
-								height:60,
-								fill:this._color,
-								isDragging:false,
-								shape:this._shape
-							} );
-
-						}
-
-					} );
-
-				}
-
-			},
 			getRandomColor = ()=>{
 
 			  let letters = '0123456789ABCDEF';
@@ -147,104 +81,134 @@
 			  return color;
 
 			},
-			drawSquare = (x,y,color)=>{
+			drawSquare = ( color )=>{
 
-				this._ctx.beginPath();
-				this._ctx.fillStyle = color;
-				this._ctx.fillRect( x-30,y-30,60,60 );
+				let ctx = initNewCanvas( 60,60 );
 
-			},
-			drawTriangle = (x,y,color)=>{
-
-				this._ctx.beginPath();
-				this._ctx.fillStyle = color;
-				this._ctx.lineJoin = 'miter';
-				this._ctx.moveTo( x,y-40 );
-				this._ctx.lineTo( x+(Math.sqrt(3)*20),y+20 );
-				this._ctx.lineTo( x-(Math.sqrt(3)*20),y+20 );
-				this._ctx.closePath();
-				this._ctx.fill();
-
-			},
-			drawCircle = (x,y,color)=>{
-
-				this._ctx.beginPath();
-				this._ctx.fillStyle = color;
-				this._ctx.arc(x,y,30,0,2*Math.PI,false);
-				this._ctx.fill();
-
-			},
-			drawRect = ( x,y,w,h )=>{
 				ctx.beginPath();
-				ctx.rect(x, y, w, h);
+				ctx.fillStyle = color;
+				ctx.rect(0,0,60,60);
+				ctx.fill();
+
+			},
+			drawTriangle = ( color)=>{
+
+				let heightCanv = 90/Math.sqrt(3);
+
+				let ctx = initNewCanvas( 60,heightCanv );
+
+				ctx.beginPath();
+				ctx.fillStyle = color;
+				ctx.lineJoin = 'miter';
+				ctx.moveTo( 30,0 );
+				ctx.lineTo( 60,heightCanv );
+				ctx.lineTo( 0,heightCanv );
 				ctx.closePath();
 				ctx.fill();
-			},
-			clear = ()=>{
-				this._ctx.clearRect( 0,0,this.width,this._height );
-			},
-			redraw = ()=>{
-
-				clear();
-
-				this._ctx.fillStyle = "#eee";
-
-				drawRect( 0,0,this.width,this.height );
 
 			},
-			myDown = ( e )=>{
+			drawCircle = ( color )=>{
 
-				this._canvas.addEventListener( 'mousedown',( e )=>{
+				let ctx = initNewCanvas( 60,60 );
 
-			    e.preventDefault();
-			    e.stopPropagation();
+				ctx.beginPath();
+				ctx.fillStyle = color;
+				ctx.arc( 30,30,30,0,2*Math.PI,false );
+				ctx.fill();
 
-			    //var mx = parseInt(e.clientX - offsetX);
-			    //var my = parseInt(e.clientY - offsetY);
-
-			    this._pos = getPos( e );
-			    let x = this._pos.x;
-			    let y = this._pos.y;
-
-			    this._drag = false;
-
-			    for (let i = 0; i < this._rect.length; i++ ) {
-
-			        let r = this._rect[i];
-
-			        if ( x > r.x && x < r.x + r.width && y > r.y && y < r.y + r.height ) {
-
-			            this._drag = true;
-			            r.isDragging = true;
-
-			        }
-			    }
-
-			    this._startX = x;
-			    this._startY = y;
-
-			  } );
-			    
 			},
-			myUp = ( e )=>{  
-			    // tell the browser we're handling this mouse event
-			    e.preventDefault();
-			    e.stopPropagation();
+			initNewCanvas = ( width,height )=>{
 
-			    // clear all the dragging flags
-			    dragok = false;
-			    for (var i = 0; i < rects.length; i++) {
-			        rects[i].isDragging = false;
-			    }
+				let canvas = undefined;
+				let context = undefined; 
+
+				canvas = document.createElement( 'canvas' );
+
+				canvas.width = width;
+				canvas.height = height;
+
+				this._canvasCur = canvas;
+
+				context = canvas.getContext('2d');
+ 
+				return context;
+
+			},
+			clickOnCanvas = ()=>{
+
+				this._canvas.addEventListener( 'click',( e )=>{
+
+					if ( this._arrCanvas.length !=0 ) {
+
+						// for ( let i = 0; i < this._arrCanvas.length; i++ ) {
+
+						// 	let contCanvasArr = this._arrCanvas[i];
+
+						// 	if ( contCanvasArr.isPointInPath(30,30) ) {
+
+						// 		draw( e );
+
+						// 	} else {
+
+						// 		draw( e );
+
+						// 	}
+						// }
+
+						draw( e );
+					} else {
+
+						draw( e );
+						
+					}
+
+				} );
+			
+			},
+			draw = ( e )=>{
+
+				if ( this._ctx ) {
+
+					this._pos = getPos( e );
+					let x = this._pos.x;
+					let y = this._pos.y;
+
+					this._color = getRandomColor();
+
+					if ( this._shape == 'square' ) {
+
+						drawSquare( this._color );
+
+						this._ctx.drawImage( this._canvasCur,x-30,y-30 );
+
+						this._arrCanvas.push(this._canvasCur.getContext('2d'));
+
+					} else if ( this._shape == 'triangle' ) {
+
+						drawTriangle( this._color );
+
+						this._ctx.drawImage( this._canvasCur,x-30,y-(60/Math.sqrt(3)) );
+
+						this._arrCanvas.push(this._canvasCur);
+
+					} else if ( this._shape == 'circle' ) {
+
+						drawCircle( this._color );
+
+						this._ctx.drawImage( this._canvasCur,x-30,y-30 );
+
+						this._arrCanvas.push(this._canvasCur);
+
+					}
+				}
+
 			};
 
 			takeShape();
 
 			changeShape();
 
-			draw();
-
-			myDown();
+			clickOnCanvas();
 
 		}
 
