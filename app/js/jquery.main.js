@@ -7,7 +7,7 @@
 			this.x = x;
 			this.y = y;
 			this.canvas = document.createElement( 'canvas' );
-			this._ctx = this.canvas.getContext( '2d' );
+			this.ctx = this.canvas.getContext( '2d' );
 			this._color = this._getRandomColor();
 			this._widthCanvas = 60;
 			this._heightCanvas = 60;
@@ -45,14 +45,14 @@
 
 			let triangleHeight = this._heightCanvas*(1.5/Math.sqrt(3));
 
-			this._ctx.beginPath();
-			this._ctx.fillStyle = this._color;
-			this._ctx.lineJoin = 'miter';
-			this._ctx.moveTo( this._widthCanvas/2,0 );
-			this._ctx.lineTo( this._widthCanvas,triangleHeight );
-			this._ctx.lineTo( 0,triangleHeight );
-			this._ctx.closePath();
-			this._ctx.fill();
+			this.ctx.beginPath();
+			this.ctx.fillStyle = this._color;
+			this.ctx.lineJoin = 'miter';
+			this.ctx.moveTo( this._widthCanvas/2,0 );
+			this.ctx.lineTo( this._widthCanvas,triangleHeight );
+			this.ctx.lineTo( 0,triangleHeight );
+			this.ctx.closePath();
+			this.ctx.fill();
 
 		}
 	
@@ -62,10 +62,10 @@
 
 		_drawShape(){
 
-				this._ctx.beginPath();
-				this._ctx.fillStyle = this._color;
-				this._ctx.rect( 0,0,this._widthCanvas,this._heightCanvas );
-				this._ctx.fill();
+				this.ctx.beginPath();
+				this.ctx.fillStyle = this._color;
+				this.ctx.rect( 0,0,this._widthCanvas,this._heightCanvas );
+				this.ctx.fill();
 
 		}
 
@@ -75,9 +75,9 @@
 
 		_drawShape(){
 
-				this._ctx.beginPath();
-				this._ctx.fillStyle = this._color;
-				this._ctx.arc( 
+				this.ctx.beginPath();
+				this.ctx.fillStyle = this._color;
+				this.ctx.arc( 
 					this._widthCanvas/2,
 					this._heightCanvas/2,
 					this._widthCanvas/2,
@@ -86,7 +86,7 @@
 					false
 				);
 
-				this._ctx.fill();
+				this.ctx.fill();
 		}
 	
 	}
@@ -112,16 +112,22 @@
 
 			this._canvas.addEventListener( 'mousedown',( event )=>{
 
-				this._canvas.addEventListener ( 'mousemove', ()=>{
+				
 
-					console.log('move');
+			} );
 
-				});
+			this._canvas.addEventListener( 'mouseup',( event )=>{
 
-				let position = this._getMousePosition ( event );	
+				let position = this._getMousePosition( event );	
 				
 				let x = position.x;			
 				let y = position.y;
+
+				this._shapes.forEach( ( item )=>{
+
+
+				} );
+
 
 				if ( this._shape == 'square' )	{
 
@@ -137,7 +143,17 @@
 
 				}
 
-			} );	
+			} );
+
+			this._canvas.addEventListener ( 'mousemove', ( event )=>{
+
+				if ( event.buttons == 1 ){
+
+					console.log('move');
+
+				}
+
+			});	
 
 		}
 
