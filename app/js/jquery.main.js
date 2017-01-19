@@ -4,6 +4,7 @@
 	class Shape {
 
 		constructor( x,y ){
+			this.target = false;
 			this.x = x;
 			this.y = y;
 			this.canvas = document.createElement( 'canvas' );
@@ -11,6 +12,7 @@
 			this._color = this._getRandomColor();
 			this._widthCanvas = 60;
 			this._heightCanvas = 60;
+
 			this._setCanvasSize();
 			this._drawShape();
 		}
@@ -37,6 +39,7 @@
 			this.canvas.height = this._heightCanvas;
 
 		}
+
 	}
 
 	class Triangle extends Shape {
@@ -64,7 +67,7 @@
 
 				this.ctx.beginPath();
 				this.ctx.fillStyle = this._color;
-				this.ctx.rect( 0,0,this._widthCanvas,this._heightCanvas );
+				this.ctx.rect( 0,0,this._widthCanvas,this._heightCanvas );				
 				this.ctx.fill();
 
 		}
@@ -85,7 +88,6 @@
 					2*Math.PI,
 					false
 				);
-
 				this.ctx.fill();
 		}
 	
@@ -99,7 +101,8 @@
 			this._ctx = this._canvas.getContext('2d');
 			this._shape = undefined;
 			this._shapes = [];
-			this._radioButtons = document.querySelectorAll( '.site__shape input' );
+			this._radioButtons = document.querySelectorAll( '.site__shape input' ),
+			this._valueMove = undefined;
 
 			this._takeShape();
 			this._onEvents();
@@ -112,49 +115,85 @@
 
 			this._canvas.addEventListener( 'mousedown',( event )=>{
 
-				
-
-			} );
-
-			this._canvas.addEventListener( 'mouseup',( event )=>{
-
-				let position = this._getMousePosition( event );	
-				
+				let position = this._getMousePosition( event );					
 				let x = position.x;			
 				let y = position.y;
 
-				this._shapes.forEach( ( item )=>{
+				for ( let i = 0; i < this._shapes.length; i++ ) {
 
+					if ( x > this._shapes[i].x - 30 &&
+							 x < this._shapes[i].x + 30 &&
+							 y > this._shapes[i].y - 30 &&
+							 y < this._shapes[i].y + 30
+					) {
 
-				} );
+						this._shapes[i].target = true;
+						this._shapes.push( this._shapes[i] );
+						this._shapes.splice( i,1 );
+						break;
 
-
-				if ( this._shape == 'square' )	{
-
-					this._shapes.push( new Square( x,y ) );
-
-				}	else if ( this._shape == 'triangle' ) {
-
-					this._shapes.push( new Triangle( x,y ) );
-
-				} else if ( this._shape == 'circle' ) {
-
-					this._shapes.push( new Circle( x,y ) );
-
+					}
 				}
-
-			} );
+			});
 
 			this._canvas.addEventListener ( 'mousemove', ( event )=>{
 
+				let position = this._getMousePosition( event );					
+				let x = position.x;			
+				let y = position.y;
+
 				if ( event.buttons == 1 ){
 
-					console.log('move');
+					this._shapes.forEach( ( item )=>{
 
+						if ( item.target == true ) {
+
+							item.x = x;
+							item.y = y;
+
+						}
+					} );
 				}
+			});
 
-			});	
+			this._canvas.addEventListener( 'mouseup',( event )=>{
 
+				let position = this._getMousePosition( event );					
+				let x = position.x;			
+				let y = position.y;
+
+				let pointInShape = false;
+
+				this._shapes.forEach( ( item )=>{
+
+					if ( item.target == true ) {
+
+						item.x = x;
+						item.y = y;
+						item.target = false;
+
+						pointInShape = true;
+
+					}
+				} );
+
+				if ( pointInShape == false ) {
+
+					if ( this._shape == 'square' )	{
+
+						this._shapes.push( new Square( x,y ) );
+
+					}	else if ( this._shape == 'triangle' ) {
+
+						this._shapes.push( new Triangle( x,y ) );
+
+					} else if ( this._shape == 'circle' ) {
+
+						this._shapes.push( new Circle( x,y ) );
+
+					}
+				}	
+			} );	
 		}
 
 		_getMousePosition( evt ){
@@ -215,7 +254,7 @@
 
 				this._ctx.save();
 				this._ctx.translate( item.x, item.y );
-				this._ctx.drawImage( item.canvas,-30,-30 );
+				this._ctx.drawImage( item.canvas,-30,-30 );			
 				this._ctx.restore();
 
 			} );
