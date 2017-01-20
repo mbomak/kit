@@ -7,8 +7,8 @@
                 obj: $( this ),
                 showType: 2, // if "showType = 0" tabs will be without any animations
                 activeIndex: function( index ){
-                    console.log( index )
-                 }
+                    
+                }
             } );
         } );
 
