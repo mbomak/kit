@@ -21,3 +21,61 @@
 		strocke: #0f0;
 	}
 }
+
+.rating {
+
+	&__wrap {
+		position: relative;
+		display: inline-flex;
+		flex-direction: row-reverse;
+	}
+
+	input {
+		position: absolute;
+		clip: rect(0, 0, 0, 0);
+	}
+
+	input:checked ~ label {
+		&::before {
+			visibility: visible;
+			opacity: 1;
+		}
+	}
+
+	label {
+		position: relative;
+		display: inline-block;
+		width: 20px;
+		height: 21px;
+		margin-left: 3px;
+		background: url(../img/buggy-feedback-stars-pick.png) 0 0 no-repeat;
+		background-size: cover;
+		cursor: pointer;
+
+		&::before {
+			content: '';
+			visibility: visible;
+			opacity: 0;
+			position: absolute;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			background: url(../img/buggy-feedback-stars-pick.png) 100% 0 no-repeat;
+			background-size: cover;
+			transition: opacity 0.3s;
+		}
+
+		&:hover,
+		&:hover~ label {
+			&::before {
+				visibility: visible;
+				opacity: 1;
+			}
+		}
+
+		&:last-of-type {
+			margin-left: 0;
+		}
+	}
+}
